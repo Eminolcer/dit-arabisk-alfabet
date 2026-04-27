@@ -39,48 +39,6 @@
       padding: 16px;
     }
 
-    .selected-card {
-      background: white;
-      border-radius: 24px;
-      padding: 24px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
-    }
-
-    .big-letter {
-      font-size: 96px;
-      line-height: 1.1;
-      direction: rtl;
-    }
-
-    .letter-name {
-      font-size: 24px;
-      font-weight: bold;
-      margin-top: 8px;
-    }
-
-    .instruction {
-      color: #6b7280;
-      margin-top: 8px;
-    }
-
-    .play-button {
-      margin-top: 18px;
-      border: none;
-      background: #2563eb;
-      color: white;
-      padding: 14px 22px;
-      border-radius: 999px;
-      font-size: 17px;
-      cursor: pointer;
-      box-shadow: 0 6px 14px rgba(37,99,235,0.3);
-    }
-
-    .play-button:active {
-      transform: scale(0.98);
-    }
-
     .grid {
       direction: rtl;
       display: grid;
@@ -132,10 +90,6 @@
         font-size: 28px;
       }
 
-      .big-letter {
-        font-size: 82px;
-      }
-
       .grid {
         grid-template-columns: repeat(3, 1fr);
       }
@@ -149,13 +103,6 @@
   </header>
 
   <main class="app">
-    <section class="selected-card">
-      <div id="bigLetter" class="big-letter">ا</div>
-      <div id="letterName" class="letter-name">Alif</div>
-      <div class="instruction">Tryk på lydknappen eller vælg et bogstav nedenfor</div>
-      <button class="play-button" onclick="playSelectedSound()">🔊 Afspil lyd</button>
-    </section>
-
     <section id="alphabetGrid" class="grid"></section>
   </main>
 
@@ -197,8 +144,6 @@
 
     let selectedIndex = 0;
     const grid = document.getElementById("alphabetGrid");
-    const bigLetter = document.getElementById("bigLetter");
-    const letterName = document.getElementById("letterName");
 
     function renderLetters() {
       grid.innerHTML = "";
@@ -217,8 +162,6 @@
 
     function selectLetter(index) {
       selectedIndex = index;
-      bigLetter.textContent = letters[index].arabic;
-      letterName.textContent = letters[index].name;
       renderLetters();
       playSelectedSound();
     }
