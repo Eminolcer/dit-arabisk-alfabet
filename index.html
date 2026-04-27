@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="da" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DIT Arabisk Alfabet</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f7f3e8, #e8f1ff);
+      color: #1f2937;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 28px 16px 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      font-size: 16px;
+      color: #4b5563;
+    }
+
+    .app {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .selected-card {
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .big-letter {
+      font-size: 96px;
+      line-height: 1.1;
+      direction: rtl;
+    }
+
+    .letter-name {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .instruction {
+      color: #6b7280;
+      margin-top: 8px;
+    }
+
+    .play-button {
+      margin-top: 18px;
+      border: none;
+      background: #2563eb;
+      color: white;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-size: 17px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(37,99,235,0.3);
+    }
+
+    .play-button:active {
+      transform: scale(0.98);
+    }
+
+    .grid {
+      direction: rtl;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+      gap: 12px;
+      padding-bottom: 28px;
+    }
+
+    .letter-button {
+      background: white;
+      border: 2px solid transparent;
+      border-radius: 20px;
+      padding: 16px 8px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+      transition: 0.15s ease;
+    }
+
+    .letter-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .letter-button.active {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .arabic-letter {
+      font-size: 42px;
+      direction: rtl;
+    }
+
+    .latin-name {
+      font-size: 13px;
+      color: #4b5563;
+      margin-top: 4px;
+    }
+
+    footer {
+      text-align: center;
+      color: #6b7280;
+      font-size: 13px;
+      padding: 20px 12px 32px;
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 28px;
+      }
+
+      .big-letter {
+        font-size: 82px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>DIT Arabisk Alfabet</h1>
+    <div class="subtitle">Tryk på et bogstav og hør lyden</div>
+  </header>
+
+  <main class="app">
+    <section class="selected-card">
+      <div id="bigLetter" class="big-letter">ا</div>
+      <div id="letterName" class="letter-name">Alif</div>
+      <div class="instruction">Tryk på lydknappen eller vælg et bogstav nedenfor</div>
+      <button class="play-button" onclick="playSelectedSound()">🔊 Afspil lyd</button>
+    </section>
+
+    <section id="alphabetGrid" class="grid"></section>
+  </main>
+
+  <footer>
+    Udviklet af Roskilde islamisk menighed
+  </footer>
+
+  <script>
+    const letters = [
+      { arabic: "ا", name: "Alif", sound: "alif.mp3" },
+      { arabic: "ب", name: "Ba", sound: "ba.mp3" },
+      { arabic: "ت", name: "Ta", sound: "ta.mp3" },
+      { arabic: "ث", name: "Tha", sound: "tha.mp3" },
+      { arabic: "ج", name: "Jim", sound: "jim.mp3" },
+      { arabic: "ح", name: "Ha", sound: "ha.mp3" },
+      { arabic: "خ", name: "Kha", sound: "kha.mp3" },
+      { arabic: "د", name: "Dal", sound: "dal.mp3" },
+      { arabic: "ذ", name: "Dhal", sound: "dhal.mp3" },
+      { arabic: "ر", name: "Ra", sound: "ra.mp3" },
+      { arabic: "ز", name: "Zay", sound: "zay.mp3" },
+      { arabic: "س", name: "Sin", sound: "sin.mp3" },
+      { arabic: "ش", name: "Shin", sound: "shin.mp3" },
+      { arabic: "ص", name: "Sad", sound: "sad.mp3" },
+      { arabic: "ض", name: "Dad", sound: "dad.mp3" },
+      { arabic: "ط", name: "Ta", sound: "taa.mp3" },
+      { arabic: "ظ", name: "Dha", sound: "dha.mp3" },
+      { arabic: "ع", name: "Ayn", sound: "ayn.mp3" },
+      { arabic: "غ", name: "Ghayn", sound: "ghayn.mp3" },
+      { arabic: "ف", name: "Fa", sound: "fa.mp3" },
+      { arabic: "ق", name: "Qaf", sound: "qaf.mp3" },
+      { arabic: "ك", name: "Kaf", sound: "kaf.mp3" },
+      { arabic: "ل", name: "Lam", sound: "lam.mp3" },
+      { arabic: "م", name: "Mim", sound: "mim.mp3" },
+      { arabic: "ن", name: "Nun", sound: "nun.mp3" },
+      { arabic: "ه", name: "Ha", sound: "haa.mp3" },
+      { arabic: "و", name: "Waw", sound: "waw.mp3" },
+      { arabic: "ي", name: "Ya", sound: "ya.mp3" }
+    ];
+
+    let selectedIndex = 0;
+    const grid = document.getElementById("alphabetGrid");
+    const bigLetter = document.getElementById("bigLetter");
+    const letterName = document.getElementById("letterName");
+
+    function renderLetters() {
+      grid.innerHTML = "";
+
+      letters.forEach((letter, index) => {
+        const button = document.createElement("button");
+        button.className = "letter-button" + (index === selectedIndex ? " active" : "");
+        button.innerHTML = `
+          <div class="arabic-letter">${letter.arabic}</div>
+          <div class="latin-name">${letter.name}</div>
+        `;
+        button.onclick = () => selectLetter(index);
+        grid.appendChild(button);
+      });
+    }
+
+    function selectLetter(index) {
+      selectedIndex = index;
+      bigLetter.textContent = letters[index].arabic;
+      letterName.textContent = letters[index].name;
+      renderLetters();
+      playSelectedSound();
+    }
+
+    function playSelectedSound() {
+      const letter = letters[selectedIndex];
+      const audio = new Audio(`sounds/${letter.sound}`);
+
+      audio.play().catch(() => {
+        speakFallback(letter.name);
+      });
+    }
+
+    function speakFallback(text) {
+      if ("speechSynthesis" in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        utterance.rate = 0.8;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("Lydfil mangler. Tilføj lydfiler i mappen 'sounds'.");
+      }
+    }
+
+    renderLetters();
+  </script>
+</body>
+</html>
